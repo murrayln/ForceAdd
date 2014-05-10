@@ -1,0 +1,40 @@
+<?php
+
+$course = $_POST["course"];
+$section = $_POST["section"];
+$text = $_POST["text"];
+$dateEntered = date("Y-m-d");
+
+$uniqueId = "gabrielr";
+
+include 'db.php';
+
+$query = "SELECT DISTINCT crn FROM Class WHERE courseNum = '$course', section = '$section'"; 
+$result = mysql_query($query);
+
+$row = mysql_fetch_array($result);
+
+$crn = $row['crn'];
+
+$strSQL = "INSERT INTO Request (";
+$strSQL = $strSQL . "requestedCRN, ";
+$strSQL = $strSQL . "uniqueId, ";
+$strSQL = $strSQL . "dateEntered, ";
+$strSQL = $strSQL . "description) ";
+
+$strSQL = $strSQL . "VALUES (";
+
+$strSQL = $strSQL . $crn . ", ";
+$strSQL = $strSQL ."\"". $uniqueId."\", ";
+$strSQL = $strSQL ."\"". $dateEntered. "\", ";
+$strSQL = $strSQL ."\"". $text."\")";
+
+
+mysql_query($strSQL) or die (mysql_error());
+
+mysql_close();
+
+header('Location: new_request.php');
+exit;
+
+?>
